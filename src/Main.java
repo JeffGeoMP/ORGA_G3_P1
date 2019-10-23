@@ -28,10 +28,8 @@ public class Main extends javax.swing.JFrame {
     
     public Main() {
         initComponents();
-        Editar.setEnabled(false);
         Guardar.setEnabled(false);
         Guardarcomo.setEnabled(false);
-  
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -42,7 +40,6 @@ public class Main extends javax.swing.JFrame {
         Menu = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         Abrir = new javax.swing.JMenuItem();
-        Editar = new javax.swing.JMenuItem();
         Guardar = new javax.swing.JMenuItem();
         Guardarcomo = new javax.swing.JMenuItem();
         Pixelart = new javax.swing.JMenu();
@@ -55,6 +52,14 @@ public class Main extends javax.swing.JFrame {
 
         txt.setColumns(20);
         txt.setRows(5);
+        txt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFocusLost(evt);
+            }
+        });
         jScrollPane1.setViewportView(txt);
 
         Menu.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menu Principal", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -69,13 +74,15 @@ public class Main extends javax.swing.JFrame {
         });
         Archivo.add(Abrir);
 
-        Editar.setText("Editar");
-        Archivo.add(Editar);
-
         Guardar.setText("Guardar");
         Archivo.add(Guardar);
 
         Guardarcomo.setText("Guardar Como...");
+        Guardarcomo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarcomoActionPerformed(evt);
+            }
+        });
         Archivo.add(Guardarcomo);
 
         Menu.add(Archivo);
@@ -135,6 +142,7 @@ public class Main extends javax.swing.JFrame {
                     Direccion_File = file.getAbsolutePath();
                     String documento = Abrir(file);
                     txt.setText (documento);
+                    Guardar.setEnabled(true);
                 }else{
                     JOptionPane.showMessageDialog(null,"Archivo No Compatible");
                 }
@@ -159,7 +167,45 @@ public class Main extends javax.swing.JFrame {
         if(txt.getText().equalsIgnoreCase("")){
             JOptionPane.showMessageDialog(null, "No Hay Nada en el Area de Texto");
         }
+        else{
+            Analizador An = new Analizador();
+            An.Analizar(txt.getText());
+            String[] Errores = An.Validaciones();
+        }
     }//GEN-LAST:event_ConvertirActionPerformed
+
+    private void txtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFocusGained
+        if(txt.getText().isEmpty()){
+          Guardarcomo.setEnabled(false);
+       }else{
+           Guardarcomo.setEnabled(true);
+       }
+    }//GEN-LAST:event_txtFocusGained
+
+    private void txtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFocusLost
+     if(txt.getText().isEmpty()){
+          Guardarcomo.setEnabled(false);
+       }else{
+           Guardarcomo.setEnabled(true);
+       }
+    }//GEN-LAST:event_txtFocusLost
+
+    private void GuardarcomoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarcomoActionPerformed
+    if(Eleccion.showDialog(null,"Guardar")==JFileChooser.APPROVE_OPTION){
+            file = Eleccion.getSelectedFile();
+            if(file.getName().endsWith("draw")){
+                String Documento = txt.getText().replace("\n","\r\n");
+                String Mensaje = GuardarArchivo(file, Documento);
+                if(Mensaje != null){
+                    JOptionPane.showMessageDialog(null,"Se a Guardado exitosamente el Documento");
+                }else{
+                    JOptionPane.showMessageDialog(null,"Archivo No Compatible");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "No se a guardado el Dodumento");
+            }
+        }
+    }//GEN-LAST:event_GuardarcomoActionPerformed
 
     public String Abrir(File Archivo){
         String doc = "";
@@ -176,6 +222,21 @@ public class Main extends javax.swing.JFrame {
         }
         return doc;
     }
+       
+    public String GuardarArchivo(File archivo, String documento){
+        String mensaje = null;
+        try{
+            Salida = new FileOutputStream(archivo);
+            byte[] bytxt = documento.getBytes();
+            Salida.write(bytxt);
+            mensaje = "Archivo Guardado";
+            
+        }catch (Exception e){
+            
+        }
+         return mensaje;   
+    }
+    
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -183,7 +244,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu Archivo;
     private javax.swing.JMenu Ayuda;
     private javax.swing.JMenuItem Convertir;
-    private javax.swing.JMenuItem Editar;
     private javax.swing.JMenuItem Guardar;
     private javax.swing.JMenuItem Guardarcomo;
     private javax.swing.JMenuBar Menu;
