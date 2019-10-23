@@ -9,10 +9,10 @@ public class Tipo {
     public static int Simbolo = 4;
     public static int Coordenadas = 5;
     
-    public String lex;
-    public int Fila;
-    public int Columna;
-    public int gTipo;
+    private String lex;
+    private int Fila;
+    private int Columna;
+    private int gTipo;
 
     public String getLex() {
         return lex;

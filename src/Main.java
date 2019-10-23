@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -168,9 +169,18 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No Hay Nada en el Area de Texto");
         }
         else{
-            Analizador An = new Analizador();
-            An.Analizar(txt.getText());
-            String[] Errores = An.Validaciones();
+            Analizador An = new Analizador();       //Inicializamos Analizador
+            An.Analizar(txt.getText());             //Analiza texto en JtextArea
+            String[] Errores = An.Validaciones();   //Valida y Retorna Comprobacion
+            ArrayList Coordenadas = An.getCoordenadas();
+            //System.out.println(An.Imprimir());
+            if(Errores[0].equalsIgnoreCase("0")){
+                JOptionPane.showMessageDialog(null, "No Hay Errores", "Informacion",JOptionPane.INFORMATION_MESSAGE);
+                PixelArt pix = new PixelArt(Coordenadas);
+                pix.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, ""+Errores[1], "Informacion", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_ConvertirActionPerformed
 

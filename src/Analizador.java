@@ -7,12 +7,16 @@ import java.util.ArrayList;
 
 public class Analizador {
 
-    static ArrayList<Object> Coordenadas;
-    static ArrayList<Object> Errores;
-    static ArrayList<Object> Simbolos;
+    private ArrayList<Object> Coordenadas;
+    private ArrayList<Object> Errores;
+    private ArrayList<Object> Simbolos;
     
-    String lexema;
-    int fila, columna, indice, estado; 
+    private String lexema;
+    private int fila;
+    private int columna;
+    private int indice;
+    private int estado;
+    
     
     public Analizador(){
         Coordenadas = new ArrayList();
@@ -61,8 +65,7 @@ public class Analizador {
             return false;
     }
   
-    
-    // ----------------- Verifica Si es Comilla --------------// "
+       // ----------------- Verifica Si es Comilla --------------// "
     private Boolean EsComillas(int codigo)
     {
             if (codigo == 34)
@@ -212,13 +215,14 @@ public class Analizador {
         
         Tipo g = (Tipo)Coordenadas.get(0);
         
-        if(g.gTipo == Tipo.Coordenadas){
+        if(g.getgTipo() == Tipo.Coordenadas){
             Coordenadas.remove(0);
             Error[0] = "0";
             Error[1] = "Ninguno";
         }else{
             Error[0] = "1";
             Error[1] = "Error No. 1 No Existe Palabra \"Coordenadas\"";
+            return Error;
         }
          
         if(Errores.isEmpty()){
@@ -227,15 +231,42 @@ public class Analizador {
         }else{
             Error[0] = "1";
             Error[1] = "Error No. 2 Existen Errores Porfavor Revise...";
+            return Error;
+        }
+        int count_x = 0;
+        int count_y = 0;
+        int coor = 0;
+        for(int i =0; i<Coordenadas.size();i++){
+            g = (Tipo)Coordenadas.get(i);
+            if(g.gTipo==Tipo.CoordenadaX){
+                count_x++;
+            }
+            if(g.gTipo==Tipo.CoordenadaY){
+                count_y++;
+            }
+            if(g.gTipo==Tipo.Numero){
+                coor++;
+            }
         }
         
-        if(Coordenadas.size()%2 ==0){
+        if(count_x == count_y){
             Error[0] = "0";
             Error[1] = "Ninguno";    
         }else{
             Error[0] = "1";
-            Error[1] = "Error No. 3 El Numero de Coordenadas No Coincide PorFavor Revise...";
+            Error[1] = "Error No. 3 El Numero de X y Y es Incongruente Porfavor Revise...";
+            return Error;
         }
+        
+        if((count_x+count_y)==coor){
+            Error[0] = "0";
+            Error[1] = "Ninguno";    
+        }else{
+            Error[0] = "1";
+            Error[1] = "Error No. 4 Hay Mas Valores Que Coordenadas X y Y";
+            return Error;
+        }
+        
         return Error;
     }
 
@@ -247,16 +278,20 @@ public class Analizador {
             g = (Tipo)Coordenadas.get(i);
             txt = txt + g.ToString() +"\n";
         }
-        
-        for(int i=0; i<Errores.size();i++){
-            er = (Error)Errores.get(i);
-            txt = txt + er.ToString() + "\n";
-        }
-        
-        for(int i=0; i<Simbolos.size();i++){
-            g = (Tipo)Simbolos.get(i);
-            txt = txt + g.ToString() + "\n";
-        }
+//      
+//        for(int i=0; i<Errores.size();i++){
+//            er = (Error)Errores.get(i);
+//            txt = txt + er.ToString() + "\n";
+//        }
+//        
+//        for(int i=0; i<Simbolos.size();i++){
+//            g = (Tipo)Simbolos.get(i);
+//            txt = txt + g.ToString() + "\n";
+//        }
         return txt;
+    }
+    
+    public ArrayList<Object> getCoordenadas() {
+        return Coordenadas;
     }
 }
