@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 public class Analizador {
 
-    private ArrayList<Object> Coordenadas;
-    private ArrayList<Object> Errores;
-    private ArrayList<Object> Simbolos;
+    public ArrayList<Object> Coordenadas;
+    public ArrayList<Object> Errores;
+    public ArrayList<Object> Simbolos;
     
-    private String lexema;
-    private int fila;
-    private int columna;
-    private int indice;
-    private int estado;
+    public String lexema;
+    public int fila;
+    public int columna;
+    public int indice;
+    public int estado;
     
     
     public Analizador(){
@@ -238,13 +238,13 @@ public class Analizador {
         int coor = 0;
         for(int i =0; i<Coordenadas.size();i++){
             g = (Tipo)Coordenadas.get(i);
-            if(g.gTipo==Tipo.CoordenadaX){
+            if(g.getgTipo()==Tipo.CoordenadaX){
                 count_x++;
             }
-            if(g.gTipo==Tipo.CoordenadaY){
+            if(g.getgTipo()==Tipo.CoordenadaY){
                 count_y++;
             }
-            if(g.gTipo==Tipo.Numero){
+            if(g.getgTipo()==Tipo.Numero){
                 coor++;
             }
         }
